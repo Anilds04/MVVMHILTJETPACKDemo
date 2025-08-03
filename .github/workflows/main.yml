@@ -1,1 +1,21 @@
+name: Android CI  # Workflow name
 
+on:
+  push:
+    branches: [ main ]  # Trigger on push to main branch
+  pull_request:
+    branches: [ main ]  # Trigger on pull request targeting main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use latest Ubuntu environment
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3  # Check out the repository code
+
+    - name: Run a one-line script
+      run : echo Hello
+
+    - name: Run a muti-line script
+      run : echo Multi line 
