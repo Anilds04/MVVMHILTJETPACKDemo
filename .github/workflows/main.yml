@@ -11,7 +11,7 @@ jobs:
   lint:
     runs-on ubuntu-latest
     steps:
-      - nameCheckout the code
+      - name: Checkout the code
         uses: action/checkout@v2
 
       - name: Run Lint
