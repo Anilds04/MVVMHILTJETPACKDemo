@@ -57,9 +57,16 @@ jobs:
   instrumentation-test:
     needs: [ unit-test ]
     runs-on: macos-latest
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
@@ -75,6 +82,8 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           script: ./gradlew connectedDebugAndroidTest
+          # Optional: for stability on macOS
+          disable-linux-hw-accel: true
 
       - name: Upload test report
         uses: actions/upload-artifact@v4

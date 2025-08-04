@@ -25,4 +25,9 @@ class ProductsRepository @Inject constructor(private val productsApi: ProductsAp
                 _products.emit(response.body()!!)
         }
     }
+
+    suspend fun getProductDetails(id : String){
+
+        val response = productsApi.getProductsById(id)
+    }
 }
