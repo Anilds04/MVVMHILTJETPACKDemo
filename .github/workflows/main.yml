@@ -67,8 +67,14 @@ jobs:
       - name: Run espresso tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
-          script: ./gradlew conectedCheck
+          api-level: 30
+          target: default
+          arch: x86_64
+          profile: pixel
+          headless: true
+          disable-animations: true
+          emulator-boot-timeout: 600
+          script: ./gradlew connectedDebugAndroidTest
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
