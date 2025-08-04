@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-@Module
+
 class ProductsRepository @Inject constructor(private val productsApi: ProductsApi) {
 
     private val _products = MutableStateFlow<List<ProductsItem>>(emptyList())

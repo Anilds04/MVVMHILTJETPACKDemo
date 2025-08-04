@@ -18,7 +18,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mvvmhiltjetpackdemo.api.ProductsApi
 import com.example.mvvmhiltjetpackdemo.ui.theme.MVVMHILTJETPACKDemoTheme
+import com.example.mvvmhiltjetpackdemo.view.ProductListItem
+import com.example.mvvmhiltjetpackdemo.view.ProductsListView
 import com.example.mvvmhiltjetpackdemo.viewModel.ProductsViewModel
+
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +32,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-   /// val productsViewModel : ProductsViewModel by viewModels()
+   // val productsViewModel : ProductsViewModel by viewModels()
 
     //In jetpack compose
     //val productsViewModel1 : ProductsViewModel = viewModel()
@@ -38,13 +41,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+      //  enableEdgeToEdge()
 
        // productsViewModel = ViewModelProvider(this)[ProductsViewModel::class.java]
 
         //Used inside Jetpack compose
        // productsViewModel.products.collectAsState()
-      /*  CoroutineScope(Dispatchers.IO).launch {
+       /* CoroutineScope(Dispatchers.IO).launch {
             productsViewModel.products.collect{
                 Log.d("TAG", "onCreate: $it")
             }
@@ -54,28 +57,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             MVVMHILTJETPACKDemoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    ProductsListView(Modifier.padding(innerPadding))
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MVVMHILTJETPACKDemoTheme {
-        Greeting("Android")
-    }
-}

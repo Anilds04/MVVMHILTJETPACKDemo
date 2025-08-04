@@ -11,8 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+
 @HiltViewModel
-class ProductsViewModel @Inject constructor( private val  productsRepository: ProductsRepository) : ViewModel(){
+class ProductsViewModel @Inject constructor(private val productsRepository: ProductsRepository) : ViewModel(){
 
     val products : StateFlow<List<ProductsItem>>
         get() = productsRepository.products
