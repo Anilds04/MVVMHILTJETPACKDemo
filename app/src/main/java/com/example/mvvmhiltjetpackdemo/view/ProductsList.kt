@@ -1,7 +1,9 @@
 package com.example.mvvmhiltjetpackdemo.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,16 +27,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mvvmhiltjetpackdemo.model.ProductsItem
+import com.example.mvvmhiltjetpackdemo.viewModel.ProductDetailsViewModel
 import com.example.mvvmhiltjetpackdemo.viewModel.ProductsViewModel
 import com.skydoves.landscapist.glide.GlideImage
 
 
 @Composable
-fun ProductsListView(modifier: Modifier){
+fun ProductsListView(modifier: Modifier , onClick : (id : String) -> Unit){
 
-    val productsViewModel : ProductsViewModel = viewModel()
+    val productsViewModel : ProductsViewModel = hiltViewModel()
     val productsList = productsViewModel.products.collectAsState()
 
 
@@ -43,15 +47,20 @@ fun ProductsListView(modifier: Modifier){
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         items(productsList.value){
-            ProductListItem(it)
+            ProductListItem(it, onClick)
         }
     }
 }
 
 @Composable
-fun ProductListItem(productsItem: ProductsItem){
+fun ProductListItem(productsItem: ProductsItem , onClick : (id : String) -> Unit ){
 
-    Box (modifier = Modifier.padding(10.dp).height(200.dp)){
+    Box (modifier = Modifier
+        .padding(10.dp)
+        .height(200.dp)
+        .clickable {
+           onClick(productsItem.id.toString())
+        }){
         Column {
 
             GlideImage(

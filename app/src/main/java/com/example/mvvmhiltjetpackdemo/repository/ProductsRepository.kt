@@ -14,20 +14,28 @@ import javax.inject.Inject
 class ProductsRepository @Inject constructor(private val productsApi: ProductsApi) {
 
     private val _products = MutableStateFlow<List<ProductsItem>>(emptyList())
-
-    val products : StateFlow<List<ProductsItem>>
+    val products: StateFlow<List<ProductsItem>>
         get() = _products
 
-    suspend fun getProducts(){
+    private val _productDetails = MutableStateFlow<ProductsItem?>(null)
+    val productDetails: StateFlow<ProductsItem?>
+        get() = _productDetails
+
+
+    suspend fun getProducts() {
         val response = productsApi.getProducts()
 
-        if(response.isSuccessful && response.body() != null){
-                _products.emit(response.body()!!)
+        if (response.isSuccessful && response.body() != null) {
+            _products.emit(response.body()!!)
         }
     }
 
-    suspend fun getProductDetails(id : String){
+    suspend fun getProductsById(id: String) {
 
         val response = productsApi.getProductsById(id)
+
+        if (response.isSuccessful) {
+            _productDetails.emit(response.body())
+        }
     }
 }

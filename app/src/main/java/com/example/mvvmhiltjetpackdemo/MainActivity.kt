@@ -16,10 +16,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.mvvmhiltjetpackdemo.api.ProductsApi
 import com.example.mvvmhiltjetpackdemo.ui.theme.MVVMHILTJETPACKDemoTheme
+import com.example.mvvmhiltjetpackdemo.view.ProductDetailsScreen
 import com.example.mvvmhiltjetpackdemo.view.ProductListItem
 import com.example.mvvmhiltjetpackdemo.view.ProductsListView
+import com.example.mvvmhiltjetpackdemo.view.SplashScreen
+import com.example.mvvmhiltjetpackdemo.viewModel.ProductDetailsViewModel
 import com.example.mvvmhiltjetpackdemo.viewModel.ProductsViewModel
 
 import dagger.hilt.InstallIn
@@ -32,35 +40,70 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-   // val productsViewModel : ProductsViewModel by viewModels()
+    // val productsViewModel : ProductsViewModel by viewModels()
 
     //In jetpack compose
     //val productsViewModel1 : ProductsViewModel = viewModel()
 
-   // lateinit var productsViewModel : ProductsViewModel
+    // lateinit var productsViewModel : ProductsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-      //  enableEdgeToEdge()
+        //  enableEdgeToEdge()
 
-       // productsViewModel = ViewModelProvider(this)[ProductsViewModel::class.java]
+        // productsViewModel = ViewModelProvider(this)[ProductsViewModel::class.java]
 
         //Used inside Jetpack compose
-       // productsViewModel.products.collectAsState()
-       /* CoroutineScope(Dispatchers.IO).launch {
-            productsViewModel.products.collect{
-                Log.d("TAG", "onCreate: $it")
-            }
+        // productsViewModel.products.collectAsState()
+        /* CoroutineScope(Dispatchers.IO).launch {
+             productsViewModel.products.collect{
+                 Log.d("TAG", "onCreate: $it")
+             }
 
-        }*/
+         }*/
 
         setContent {
             MVVMHILTJETPACKDemoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ProductsListView(Modifier.padding(innerPadding))
+                    App(Modifier.padding(innerPadding))
                 }
             }
         }
     }
-}
 
+
+    @Composable
+    fun App(modifier: Modifier) {
+        val navController = rememberNavController()
+
+        NavHost(navController = navController, startDestination = "splashScreen") {
+
+            composable(route = "splashScreen"){
+                SplashScreen(){
+                    navController.navigate("home"){
+                        popUpTo("splashScreen") {inclusive = true}
+                    }
+                }
+
+            }
+
+            composable(route = "home") {
+                ProductsListView(modifier){
+                    navController.navigate("detail/$it")
+                }
+            }
+
+            composable(
+                route = "detail/{id}",
+                arguments = listOf(navArgument("id") {
+                    type = NavType.StringType
+                })
+            ) {
+                ProductDetailsScreen(modifier)
+            }
+        }
+
+    }
+
+
+}

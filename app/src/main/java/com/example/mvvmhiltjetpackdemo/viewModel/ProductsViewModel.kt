@@ -1,6 +1,7 @@
 package com.example.mvvmhiltjetpackdemo.viewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.mvvmhiltjetpackdemo.model.ProductsItem
 import com.example.mvvmhiltjetpackdemo.repository.ProductsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,7 @@ class ProductsViewModel @Inject constructor(private val productsRepository: Prod
         get() = productsRepository.products
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             productsRepository.getProducts()
         }
 
