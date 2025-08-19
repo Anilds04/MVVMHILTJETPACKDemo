@@ -1,5 +1,6 @@
 package com.example.mvvmhiltjetpackdemo.repository
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.mvvmhiltjetpackdemo.api.ProductsApi
@@ -25,7 +26,10 @@ class ProductsRepository @Inject constructor(private val productsApi: ProductsAp
     suspend fun getProducts() {
         val response = productsApi.getProducts()
 
+        Log.d("TAG----", ":${Thread.currentThread()} ")
+
         if (response.isSuccessful && response.body() != null) {
+            Log.d("TAG----", ":${Thread.currentThread()} ")
             _products.emit(response.body()!!)
         }
     }

@@ -1,5 +1,6 @@
 package com.example.mvvmhiltjetpackdemo.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mvvmhiltjetpackdemo.model.ProductsItem
@@ -20,7 +21,8 @@ class ProductsViewModel @Inject constructor(private val productsRepository: Prod
         get() = productsRepository.products
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("TAG----", ":${Thread.currentThread()} ")
             productsRepository.getProducts()
         }
 

@@ -43,6 +43,7 @@ fun ProductsListView(modifier: Modifier , onClick : (id : String) -> Unit){
 
 
     LazyVerticalGrid(GridCells.Fixed(2),
+        modifier = modifier,
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
