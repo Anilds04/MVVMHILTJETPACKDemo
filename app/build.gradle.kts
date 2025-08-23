@@ -1,14 +1,19 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.example.mvvmhiltjetpackdemo"
     compileSdk = 36
+
+
 
     defaultConfig {
         applicationId = "com.example.mvvmhiltjetpackdemo"
@@ -18,6 +23,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        //Added to read google client id
+        val webClientId: String = gradleLocalProperties(rootDir, providers).getProperty("WEB_CLIENT_ID")
+        buildConfigField("String", "WEB_CLIENT_ID", "\"$webClientId\"")
     }
 
     buildTypes {
@@ -38,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -51,6 +61,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.googleid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,4 +84,21 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.6.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("androidx.core:core-splashscreen:1.0.0")
+
+    implementation (platform("androidx.compose:compose-bom:2025.01.00"))
+    implementation ("androidx.compose.material:material-icons-extended")
+
+    //Google signIn
+    implementation("androidx.credentials:credentials:1.6.0-alpha05")
+    implementation("androidx.credentials:credentials-play-services-auth:1.6.0-alpha05")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+    // Firebase BoM
+    implementation (platform("com.google.firebase:firebase-bom:33.1.2"))
+
+    // Firebase Authentication
+    implementation ("com.google.firebase:firebase-auth")
+    //Data store
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
+
 }

@@ -36,7 +36,7 @@ import com.skydoves.landscapist.glide.GlideImage
 
 
 @Composable
-fun ProductsListView(modifier: Modifier , onClick : (id : String) -> Unit){
+fun ProductsListView(modifier: Modifier , onClick : ( String) -> Unit){
 
     val productsViewModel : ProductsViewModel = hiltViewModel()
     val productsList = productsViewModel.products.collectAsState()
@@ -54,7 +54,7 @@ fun ProductsListView(modifier: Modifier , onClick : (id : String) -> Unit){
 }
 
 @Composable
-fun ProductListItem(productsItem: ProductsItem , onClick : (id : String) -> Unit ){
+fun ProductListItem(productsItem: ProductsItem , onClick : ( String) -> Unit ){
 
     Box (modifier = Modifier
         .padding(10.dp)
