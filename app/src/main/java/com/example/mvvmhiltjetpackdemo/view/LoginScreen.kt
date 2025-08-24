@@ -55,8 +55,10 @@ import androidx.credentials.GetCredentialResponse
 import androidx.credentials.PasswordCredential
 import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mvvmhiltjetpackdemo.BuildConfig
 import com.example.mvvmhiltjetpackdemo.R
+import com.example.mvvmhiltjetpackdemo.utility.AppDataStore
 import com.example.mvvmhiltjetpackdemo.utility.AuthManager
 
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -67,6 +69,8 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -195,17 +199,18 @@ fun GoogleLoginButton(
     val authManager = remember { AuthManager(context) }
     val coroutineScope = rememberCoroutineScope()
 
+
     Image(
         painter = painterResource(R.drawable.google),
         contentDescription = "Google Sign-In",
         modifier = Modifier
             .size(40.dp)
             .clickable {
-
                 coroutineScope.launch {
                     val user =
                         authManager.signInWithGoogle(firstTime = true)  // first-time login
                     if (user != null) {
+                        saveUser(context, user)
                         onSignInSuccess(user)
                     } else {
                         Toast.makeText(context, "Google Sign-In failed", Toast.LENGTH_SHORT)
@@ -216,4 +221,10 @@ fun GoogleLoginButton(
 
             }
     )
+}
+
+suspend fun saveUser(context: Context, user: FirebaseUser) {
+    AppDataStore.putString(context, "user_name", user.displayName ?: "")
+    AppDataStore.putString(context, "user_email", user.email ?: "")
+    AppDataStore.putString(context, "user_photo", user.photoUrl?.toString() ?: "")
 }

@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +42,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mvvmhiltjetpackdemo.R
 import com.example.mvvmhiltjetpackdemo.model.NavItem
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -48,30 +50,32 @@ fun MyApp() {
 
     val navController = rememberNavController()
     val navBackStackEntry = navController.currentBackStackEntryAsState()
-
     val currentRoute = navBackStackEntry.value?.destination?.route
-
     val homeRoute = currentRoute in listOf("home")
-    val detailsRoute = currentRoute in listOf("detail/{id}")
 
-    val context = LocalContext.current
 
     Scaffold(
         topBar = {
+            when (currentRoute) {
+                Screen.Home.route -> TopBar(title = "Home", true, onBackClick = {})
 
-            if (currentRoute == "home") {
-                TopBar(title = "Home", true, onBackClick = {})
-            } else if (currentRoute?.startsWith("detail") == true) {
-                TopBar(title = "Details", false, onBackClick = {
-                    navController.popBackStack()
-                })
+                Screen.Details.route -> {
+                    TopBar(title = "Details", false, onBackClick = {
+                        navController.popBackStack()
+                    })
+                }
+
+                Screen.Settings.route ->{
+                    TopBar(title = "Settings", false, onBackClick = {
+                        navController.popBackStack()
+                    })
+                }
             }
-
         },
 
         bottomBar = {
             if (homeRoute) {
-                BottomBar()
+                BottomBar(navController)
             }
         }, modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -125,7 +129,7 @@ fun TopBar(title: String, canExit: Boolean, onBackClick: () -> Unit) {
                     Badge(
                         containerColor = Color.White,
                         contentColor = Color.Black
-                    ){
+                    ) {
                         Text(text = "2")
                     }
                 }
@@ -142,7 +146,9 @@ fun TopBar(title: String, canExit: Boolean, onBackClick: () -> Unit) {
 }
 
 @Composable
-fun BottomBar() {
+fun BottomBar(navController: NavController) {
+    val scope = rememberCoroutineScope()
+
     val navList = mutableListOf(
         NavItem("Home", Icons.Default.Home),
         NavItem("Notification", Icons.Default.Notifications),
@@ -157,7 +163,14 @@ fun BottomBar() {
             NavigationBarItem(
                 selected = selectedIndex == index,
                 onClick = {
-                    selectedIndex = index
+                    scope.launch {
+                        if (navItem.label == "Settings") {
+                            navController.navigate(Screen.Settings.route)
+                            //  navController.popBackStack()
+                        }
+                        selectedIndex = index
+                    }
+
                 },
                 icon = { Icon(imageVector = navItem.icon, "") },
                 label = { Text(text = navItem.label) })

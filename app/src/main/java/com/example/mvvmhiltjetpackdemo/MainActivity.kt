@@ -7,9 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 import com.example.mvvmhiltjetpackdemo.ui.theme.MVVMHILTJETPACKDemoTheme
+import com.example.mvvmhiltjetpackdemo.utility.AuthManager
 import com.example.mvvmhiltjetpackdemo.view.MyApp
 
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -21,6 +23,8 @@ class MainActivity : ComponentActivity() {
 
     // lateinit var productsViewModel : ProductsViewModel
 
+   // @Inject
+  //  lateinit var authManager: AuthManager
     override fun onCreate(savedInstanceState: Bundle?) {
        installSplashScreen()
         super.onCreate(savedInstanceState)

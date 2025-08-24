@@ -57,6 +57,17 @@ fun NavigateApp(
         ) {
             ProductDetailsScreen(modifier)
         }
+
+
+        composable(route = Screen.Settings.route) {
+            SettingScreen(modifier){
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(navController.graph.id) { inclusive = true } // clears all previous routes
+                    launchSingleTop = true
+                }
+            }
+        }
+
     }
 }
 
@@ -74,9 +85,10 @@ fun safeClick(onSafeClick: () -> Unit) {
 
 
 sealed class Screen(val route: String) {
-    object Login : Screen("login")
-    object Home : Screen("home")
-    object Details : Screen("detail/{id}") {
+    data object Login : Screen("login")
+    data object Home : Screen("home")
+    data object Details : Screen("detail/{id}") {
         fun createRoute(id: String) = "detail/$id"
     }
+    data object Settings : Screen("settings")
 }
